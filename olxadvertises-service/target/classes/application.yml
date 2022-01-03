@@ -1,0 +1,38 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: OLX-ADVERTISE-SERVICE
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      advertiseService:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+        waitDurationInOpenState: 5s
+management:
+  health:
+    circuitBreakers:
+      enable: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
