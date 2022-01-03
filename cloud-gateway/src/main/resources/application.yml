@@ -1,0 +1,24 @@
+server:
+  port: 9191
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: OLX-MASTERDATA-SERVICE
+          uri: http://localhost:9000/master/
+          predicates:
+           - Path=/master/**
+        - id: OLX-ADVERTISE-SERVICE
+          uri: http://localhost:9001/advertise/
+          predicates:
+           - Path=/advertise/**
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
